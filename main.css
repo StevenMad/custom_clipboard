@@ -19,7 +19,7 @@
   background-color:#e3f2fd;
 }
 
-.categoryElement , .subCategoryElement
+.categoryElement , .subCategoryElement , .clipBoardElement
 {
   width:98%;
   color:white;
@@ -32,7 +32,7 @@
   padding-top:2vh;
 }
 
-.categoryElement:hover , .subCategoryElement:hover{
+.categoryElement:hover , .subCategoryElement:hover , .clipBoardElement:hover{
   cursor: pointer;
   color:white;
   font-weight: bold;
@@ -47,6 +47,7 @@ textarea{
 .clipBoard{
   display: flex;
 }
+
 
 .btn{
   width:120px;

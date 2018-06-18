@@ -25,10 +25,22 @@ window.onload = function () {
     }
   );
 
+  $("#subCateg").iziModal();
+  $("#clip").iziModal();
+
   //onclick
-  $('.btn').on("click", function () {
+  $('.btn').on("click", function (event) {
+    console.log($("#subCateg").attr("categorie"));
+    var lien = "writer.php?";
+    if($("#categInput")[0].value.length>0)
+      lien+="cat="+$("#categInput")[0].value;
+    else if($("#sousCategInput")[0].value.length>0){
+      lien+="cat="+$("#subCateg").attr("categorie")+"&subCateg="+$("#sousCategInput")[0].value;
+    }else{
+      lien+="cat="+$("#clip").attr("categorie")+"&subCateg="+$("#clip").attr("souscateg")+"&clip="+$("#clipInput")[0].value;
+    }
     $.ajax({
-      url:"writer.php?cat="+$("#categInput")[0].value
+      url:lien
     }).done(function(){
       updateObj();
     })
@@ -53,19 +65,21 @@ function fillSubCategory(category) {
   let subCategoryIndex = 0;
   let valueArray = category.value;
   $("#subCategory").html("");
+  createAddSubCategoryButton(category);
   valueArray.forEach(function (element) {
     $("#subCategory").append(createSubCategoryElement(element.subCategory, subCategoryIndex));
     $("#subcat-" + subCategoryIndex).on("click", function () {
-      fillClipBoard(element);
+      fillClipBoard(category, element);
     });
     subCategoryIndex++;
   });
 }
 
-function fillClipBoard(subCategory) {
+function fillClipBoard(category, subCategory) {
   let clipIndex = 0;
   let textArray = subCategory.text;
   $("#clipboard").html("");
+  createAddClipBoardButton(category,subCategory);
   textArray.forEach(function (element) {
     $("#clipboard").append(createClipBoardContent(element, clipIndex));
     clipIndex++;
@@ -108,20 +122,40 @@ function createClipBoardContent(content, index) {
 
 }
 
-function createCategoryInputElement() {
-  return '<input class="categoryElement" name="newElem" type="text"><div class="btn">Valider</btn>';
+function createAddCategoryButton() {
+  let newButton = '<div class="trigger categoryElement" ><img class="img-btn" src="plus.png"/></div>';
+  $("#category").append(newButton);
 }
 
-function createAddCategoryButton() {
-  let newButton = '<div class="trigger categoryElement" data-micromodal-trigger="modal-1"><img class="img-btn" src="plus.png"/></div>';
-  $("#category").append(newButton);
+function createAddSubCategoryButton(category) {
+  let newButton = '<div categorie="'+category.category+'" class="trigger subCategoryElement"><img class="img-btn" src="plus.png"/></div>';
+  $("#subCategory").append(newButton);
+}
+
+function createAddClipBoardButton(category,subCategory) {
+  let newButton = '<div categorie="'+category.category+'" souscateg="'+subCategory.subCategory+'" class="trigger clipBoardElement"><img class="img-btn" src="plus.png"/></div>';
+  $("#clipboard").append(newButton);
 }
 
 $(document).on('click', '.trigger', function (event) {
   event.preventDefault();
   // $('#modal').iziModal('setZindex', 99999);
   // $('#modal').iziModal('open', { zindex: 99999 });
-  $('#modal').iziModal('open');
+  if(event.currentTarget.className.includes("clipBoard"))
+  {
+    var category = event.currentTarget.getAttribute("categorie");
+    var subCategory = event.currentTarget.getAttribute("souscateg");
+    $("#clip").attr("categorie",category);
+    $("#clip").attr("souscateg",subCategory);
+    $('#clip').iziModal('open');
+  }else if(event.currentTarget.className.includes("subCategoryElement"))
+  {
+    var category = event.currentTarget.getAttribute("categorie");
+    $('#subCateg').attr("categorie",category);
+    $('#subCateg').iziModal('open');
+  }else{
+    $('#modal').iziModal('open');
+  }
 });
 
 
