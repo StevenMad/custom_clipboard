@@ -21,6 +21,7 @@
 
 .categoryElement , .subCategoryElement
 {
+  width:98%;
   color:white;
   font-weight: bold;
   display: block;
@@ -62,4 +63,14 @@ textarea{
   cursor: pointer;
   background-color: #3d8be6 ;
   color:white
+}
+
+.img-btn{
+  height:4vh;
+}
+
+.myInput{
+  color:black;
+  width:80%;
+  height:60%;
 }

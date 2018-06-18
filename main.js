@@ -1,28 +1,47 @@
-var obj = [{
-  "category": "DMI",
-  "value": [{
-    "subCategory": "probleme 1",
-    "text": [
-      "text1-1", "text1-2", "text1-3"
-    ]
-  }, {
-    "subCategory": "probleme 2",
-    "text": [
-      "text2-1", "text2-2", "text2-3"
-    ]
-  }]
-}];
+let obj = [];
+
+function populateObj(data) {
+  obj = JSON.parse(data);
+  fillCategory(obj);
+}
+
+function updateObj() {
+  //ajax create obj
+  $.ajax({
+    url: "reader.php"
+  }).done(function (data) {
+    console.log(data);
+    populateObj(data);
+  })
+}
 
 window.onload = function () {
-  // console.log(document.getElementById("category").innerHTML);
-  fillCategory();
+
+  updateObj();
+
+  $("#modal").iziModal(
+    {
+      closeButton: true
+    }
+  );
+
+  //onclick
+  $('.btn').on("click", function () {
+    $.ajax({
+      url:"writer.php?cat="+$("#categInput")[0].value
+    }).done(function(){
+      updateObj();
+    })
+  })
 };
 
-function fillCategory() {
+function fillCategory(obj) {
+  $("#category").html("");
+  createAddCategoryButton();
   let categoryIndex = 0;
   obj.forEach(function (element) {
     $("#category").append(createCategoryElement(element.category, categoryIndex));
-    $("#cat-" + categoryIndex).on("click", function(){
+    $("#cat-" + categoryIndex).on("click", function () {
       fillSubCategory(element);
     });
     categoryIndex++;
@@ -36,9 +55,9 @@ function fillSubCategory(category) {
   $("#subCategory").html("");
   valueArray.forEach(function (element) {
     $("#subCategory").append(createSubCategoryElement(element.subCategory, subCategoryIndex));
-    $("#subcat-" + subCategoryIndex).on("click",function(){      
+    $("#subcat-" + subCategoryIndex).on("click", function () {
       fillClipBoard(element);
-    } );
+    });
     subCategoryIndex++;
   });
 }
@@ -88,3 +107,22 @@ function createClipBoardContent(content, index) {
   return clipBoardContent;
 
 }
+
+function createCategoryInputElement() {
+  return '<input class="categoryElement" name="newElem" type="text"><div class="btn">Valider</btn>';
+}
+
+function createAddCategoryButton() {
+  let newButton = '<div class="trigger categoryElement" data-micromodal-trigger="modal-1"><img class="img-btn" src="plus.png"/></div>';
+  $("#category").append(newButton);
+}
+
+$(document).on('click', '.trigger', function (event) {
+  event.preventDefault();
+  // $('#modal').iziModal('setZindex', 99999);
+  // $('#modal').iziModal('open', { zindex: 99999 });
+  $('#modal').iziModal('open');
+});
+
+
+
