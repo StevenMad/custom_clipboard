@@ -40,6 +40,16 @@
   
 }
 
+.clipBoardContent{
+  width:98%;
+  font-weight: bold;
+  display: block;
+  background-color: white;
+  margin: 7px;
+  text-align: center;
+  padding-top:2vh;
+}
+
 textarea{
   margin:5px;
 }
@@ -49,7 +59,7 @@ textarea{
 }
 
 
-.btn{
+.btn, .btnClip, .btnSubCateg{
   width:120px;
   height: 20px;
   background-color: 00bfa5;
@@ -60,7 +70,7 @@ textarea{
   background-color: #1565c0;
 }
 
-.btn:hover{
+.btn:hover , .btnClip:hover, .btnSubCateg:hover{
   cursor: pointer;
   background-color: #3d8be6 ;
   color:white
